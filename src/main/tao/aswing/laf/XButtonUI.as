@@ -12,8 +12,6 @@ package tao.aswing.laf
     
     import tao.aswing.XButton;
     import tao.aswing.XUtils;
-
-    import tao.utils.MusicUtils;
     import tao.geom.MRectangle;
 
     public class XButtonUI extends BasicButtonUI implements IXComponentUI
@@ -40,10 +38,10 @@ package tao.aswing.laf
 	    
 	    
 	    this.putDefault(pp + "bg", 				new SkinButtonBackground(pp));
-	    this.putDefault(pp + "defaultImage", 		MusicUtils.copyAndCreateBitmap(bitmapData, 0));
-	    this.putDefault(pp + "rolloverImage", 	MusicUtils.copyAndCreateBitmap(bitmapData, 1));
-	    this.putDefault(pp + "pressedImage", 		MusicUtils.copyAndCreateBitmap(bitmapData, 2));
-	    this.putDefault(pp + "disabledImage", 	MusicUtils.copyAndCreateBitmap(bitmapData, 3));
+	    this.putDefault(pp + "defaultImage", 		XUtils.copyAndCreateBitmap(bitmapData, 0));
+	    this.putDefault(pp + "rolloverImage", 	XUtils.copyAndCreateBitmap(bitmapData, 1));
+	    this.putDefault(pp + "pressedImage", 		XUtils.copyAndCreateBitmap(bitmapData, 2));
+	    this.putDefault(pp + "disabledImage", 	XUtils.copyAndCreateBitmap(bitmapData, 3));
 	    
 	    super.installUI(c);
 	}

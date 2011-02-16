@@ -1,4 +1,4 @@
-package tao.utils
+package tao.util
 {
     import tao.debugger.Console;
     import flash.utils.ByteArray;

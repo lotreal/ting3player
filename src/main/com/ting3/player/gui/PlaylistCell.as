@@ -19,12 +19,12 @@ package com.ting3.player.gui
         public function PlaylistCell() {
         }
 
-	public function setCellValue(v:*):void{
+	override public function setCellValue(v:*):void{
             playlist = v as PlaylistVO;
             title.setText(playlist.title);
 	}
 
-	public function getCellValue():*{
+	override public function getCellValue():*{
 	    return playlist;
 	}
 

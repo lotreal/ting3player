@@ -1,4 +1,4 @@
-﻿package tao.utils
+﻿package tao.util
 {
     /**
     * com.voidelement.images.BMPDecoder  Class for ActionScript 3.0 

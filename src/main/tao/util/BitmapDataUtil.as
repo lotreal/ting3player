@@ -1,4 +1,4 @@
-﻿package tao.utils 
+﻿package tao.util 
 {
     
     /**把一个显示对象转成BitmapData

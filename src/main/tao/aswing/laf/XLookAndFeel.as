@@ -27,11 +27,13 @@ package tao.aswing.laf
 	override protected function initClassDefaults(table:UIDefaults):void {
 	    super.initClassDefaults(table);
 	    var classDefaults:Array = [
-		"XButtonUI",       XButtonUI,
-                "XLyricUI",        XLyricUI,
-                "XRateUI",         XRateUI,
-		"XSliderUI",       XSliderUI,
-		"XToggleButtonUI", XToggleButtonUI,
+		"XActionListCellUI", XActionListCellUI,
+		"XButtonUI",         XButtonUI,
+                "XLyricUI",          XLyricUI,
+                "XPanelUI",          XPanelUI,
+                "XRateUI",           XRateUI,
+		"XSliderUI",         XSliderUI,
+		"XToggleButtonUI",   XToggleButtonUI,
 	    ];
 	    
 	    table.putDefaults(classDefaults);
@@ -60,6 +62,8 @@ package tao.aswing.laf
 
 	    //player window:
 	    skinDefaults = [
+		"XButtonUI.default.image", getBitmap(playerWindowXml.default_button.@image),
+
 		"PlayerWindow.background", getBitmap(playerWindowXml.@image),
 		//play
 		"XButtonUI.play.image", getBitmap(playerWindowXml.play.@image),

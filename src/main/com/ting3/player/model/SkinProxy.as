@@ -9,8 +9,8 @@ package com.ting3.player.model
     import flash.utils.Endian;
     
     import com.ting3.player.Signal;
-    import tao.utils.BMPDecoder;
-    import tao.utils.BitmapDataUtil;
+    import tao.util.BMPDecoder;
+    import tao.util.BitmapDataUtil;
     import tao.aswing.laf.IXmlSkin;
 
     public class SkinProxy extends BasicProxy implements IXmlSkin

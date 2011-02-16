@@ -10,7 +10,6 @@ package  tao.aswing.laf
     import org.aswing.skinbuilder.SkinButtonBackground;
     
     import tao.aswing.XToggleButton;
-    import tao.utils.MusicUtils;
     import tao.aswing.XUtils;
     
     public class XToggleButtonUI extends BasicToggleButtonUI implements IXComponentUI
@@ -29,10 +28,10 @@ package  tao.aswing.laf
 	    var image:BitmapData = XUtils.getBitmapData(this, p + "image") || new BitmapData(4, 1, true, 0x00ffffff);
 	    pSize = new IntDimension(image.width / 4, image.height);
 	    this.putDefault(p + "bg", 					new SkinButtonBackground(p));
-	    this.putDefault(p + "defaultImage",		MusicUtils.copyAndCreateBitmap(image, 0));
-	    this.putDefault(p + "rolloverImage",		MusicUtils.copyAndCreateBitmap(image, 1));
-	    this.putDefault(p + "pressedImage",		MusicUtils.copyAndCreateBitmap(image, 2));
-	    this.putDefault(p + "disabledImage",		MusicUtils.copyAndCreateBitmap(image, 3));
+	    this.putDefault(p + "defaultImage",		XUtils.copyAndCreateBitmap(image, 0));
+	    this.putDefault(p + "rolloverImage",		XUtils.copyAndCreateBitmap(image, 1));
+	    this.putDefault(p + "pressedImage",		XUtils.copyAndCreateBitmap(image, 2));
+	    this.putDefault(p + "disabledImage",		XUtils.copyAndCreateBitmap(image, 3));
 	    
 	    this.putDefault(p + "selectedImage",				getDefault(p + "pressedImage"));
 	    this.putDefault(p + "rolloverSelectedImage",		getDefault(p + "rolloverImage"));

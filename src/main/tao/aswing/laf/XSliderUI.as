@@ -16,7 +16,6 @@ package tao.aswing.laf
     import org.aswing.skinbuilder.SkinSliderUI;
     
     import tao.aswing.XSlider;
-    import tao.utils.MusicUtils;
     import tao.aswing.XUtils;
     
     public class XSliderUI extends SkinSliderUI implements IXComponentUI
@@ -45,10 +44,10 @@ package tao.aswing.laf
 		this.putDefault(p + "vertical.trackProgressImage", trackProgressImage);
 		this.putDefault(p + "vertical.trackProgressDisabledImage", trackProgressImage);
 		
-		this.putDefault(p + "thumbVertical.defaultImage", MusicUtils.copyAndCreateBitmap(thumbImage, 0, 4));
-		this.putDefault(p + "thumbVertical.pressedImage", MusicUtils.copyAndCreateBitmap(thumbImage, 1, 4));
-		this.putDefault(p + "thumbVertical.rolloverImage", MusicUtils.copyAndCreateBitmap(thumbImage, 2, 4));
-		this.putDefault(p + "thumbVertical.disabledImage", MusicUtils.copyAndCreateBitmap(thumbImage, 3, 4));
+		this.putDefault(p + "thumbVertical.defaultImage", XUtils.copyAndCreateBitmap(thumbImage, 0, 4));
+		this.putDefault(p + "thumbVertical.pressedImage", XUtils.copyAndCreateBitmap(thumbImage, 1, 4));
+		this.putDefault(p + "thumbVertical.rolloverImage", XUtils.copyAndCreateBitmap(thumbImage, 2, 4));
+		this.putDefault(p + "thumbVertical.disabledImage", XUtils.copyAndCreateBitmap(thumbImage, 3, 4));
 	    } 
 	    {
 		this.putDefault(p + "horizontal.trackImage", trackImage);
@@ -56,10 +55,10 @@ package tao.aswing.laf
 		this.putDefault(p + "horizontal.trackProgressImage", trackProgressImage);
 		this.putDefault(p + "horizontal.trackProgressDisabledImage", trackProgressImage);
 		
-		this.putDefault(p + "thumbHorizontal.defaultImage", MusicUtils.copyAndCreateBitmap(thumbImage, 0, 4));
-		this.putDefault(p + "thumbHorizontal.pressedImage", MusicUtils.copyAndCreateBitmap(thumbImage, 1, 4));
-		this.putDefault(p + "thumbHorizontal.rolloverImage", MusicUtils.copyAndCreateBitmap(thumbImage, 2, 4));
-		this.putDefault(p + "thumbHorizontal.disabledImage", MusicUtils.copyAndCreateBitmap(thumbImage, 3, 4));
+		this.putDefault(p + "thumbHorizontal.defaultImage", XUtils.copyAndCreateBitmap(thumbImage, 0, 4));
+		this.putDefault(p + "thumbHorizontal.pressedImage", XUtils.copyAndCreateBitmap(thumbImage, 1, 4));
+		this.putDefault(p + "thumbHorizontal.rolloverImage", XUtils.copyAndCreateBitmap(thumbImage, 2, 4));
+		this.putDefault(p + "thumbHorizontal.disabledImage", XUtils.copyAndCreateBitmap(thumbImage, 3, 4));
 	    }
 	    this.putDefault(p + "thumbIcon", new XSliderThumb(getPrefix()));
 	    super.installUI(c);

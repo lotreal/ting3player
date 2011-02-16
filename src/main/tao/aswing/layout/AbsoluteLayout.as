@@ -26,8 +26,8 @@ package tao.aswing.layout
 		var c:Component = target.getComponent(i);
 		var bounds:IntRectangle = XUtils.getRectang(c);
                 if (bounds != null) c.setLocation(bounds.getLocation());
-                Console.log(this, c.toString());
-                Console.log(this, bounds.toString());
+                // Console.log(this, c.toString());
+                // Console.log(this, bounds.toString());
 		c.pack();
 	    }
 	}

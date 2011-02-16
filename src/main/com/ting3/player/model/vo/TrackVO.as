@@ -1,6 +1,6 @@
 package com.ting3.player.model.vo
 {
-    import tao.utils.StringUtils;
+    import tao.util.StringUtils;
 
     public class TrackVO
     {

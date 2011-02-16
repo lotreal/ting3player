@@ -11,7 +11,7 @@ package tao.aswing
     import flash.net.URLRequest;
     import flash.utils.ByteArray;
 
-    import tao.utils.StringUtils;
+    import tao.util.StringUtils;
     
     public class LyricModel extends EventDispatcher
     {

@@ -21,13 +21,13 @@ package com.ting3.player.gui
         public function TrackCell() {
         }
 
-	public function setCellValue(v:*):void{
+	override public function setCellValue(v:*):void{
             track = v as TrackVO;
             title.setText(track.title);
             artist.setText(track.artist);
 	}
 	
-	public function getCellValue():*{
+	override public function getCellValue():*{
 	    return track;
 	}
 
