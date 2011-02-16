@@ -1,0 +1,22 @@
+package com.ting3.player.controller
+{
+    import org.puremvc.as3.multicore.interfaces.INotification;
+
+    import com.ting3.player.view.PlaylistMediator;
+
+    public class NextCommand extends BasicCommand
+    {
+	
+	public function NextCommand() 
+	{
+	    
+	}
+	
+	override public function execute(notification:INotification):void {
+            var pl:PlaylistMediator = facade.retrieveMediator(PlaylistMediator.NAME) as PlaylistMediator;
+            pl.next();
+	}
+	
+    }
+
+}
