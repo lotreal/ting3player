@@ -19,6 +19,7 @@ package com.ting3.player
 	public static const APP_TRACKLIST_LOADING :String = "tracklist_loading";
 	public static const APP_TRACKLIST_LOADED  :String = "tracklist_loaded";
 
+	public static const APP_TRACK_LOADING :String = "track_loading";
 	public static const APP_PLAY       :String = "play";
 	public static const APP_PLAY_BEGIN :String = "play_begin";
 	public static const APP_PLAYING    :String = "playing";

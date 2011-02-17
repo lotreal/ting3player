@@ -13,8 +13,6 @@ package com.ting3.player.controller
 	{
 	    var app:Main = notification.getBody().app as Main;
 	    facade.registerMediator(new AppMediator(app));
-	    this.sendNotification(Signal.APP_READY);
-
 	    // var configProxy:ConfigProxy = facade.retrieveProxy(ConfigProxy.NAME) as ConfigProxy;
 	    this.sendNotification(Signal.APP_SET_SKIN, 'test');
 	    // this.sendNotification(Signal.APP_SET_SKIN, configProxy.getDefaultSkinID());

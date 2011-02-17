@@ -67,12 +67,18 @@ package com.ting3.player.view
 	override public function listNotificationInterests() : Array {
 	    return [
                 Signal.APP_PLAYING,
+                Signal.APP_PLAY_BEGIN,
+                Signal.APP_TRACK_LOADING,
                 Signal.APP_STATUS_CHANGED,
             ];
 	}
 	
 	override public function handleNotification(note:INotification) : void {
 	    switch(note.getName()){
+		case Signal.APP_TRACK_LOADING:
+                    onTrackLoading(note);
+		case Signal.APP_PLAY_BEGIN:
+                    onPlayBegin(note);
 		case Signal.APP_PLAYING:
 		    onPlayProgress();
 		    break;
@@ -93,11 +99,24 @@ package com.ting3.player.view
 	    // updateStatus();
 	}
 
+        protected var bytesTotal:uint;
+
+	private function onPlayBegin(note:INotification):void{
+            // bytesTotal = uint(note.getBody());
+            // // Console.log(this, 'begin:' + this.getPlayCoreProxy().getLength());
+	    // player.getProgress().setMaximum(bytesTotal);
+	    player.getProgress().setMaximum(this.getPlayCoreProxy().getTotalTime());
+	}
+
 	private function onPlayProgress():void{
 	    if(player.getProgress().getValueIsAdjusting()) return;
 	    player.getProgress().setValue(this.getPlayCoreProxy().getCurrentTime());
-            // TODO 优化
+	}
+
+	private function onTrackLoading(note:INotification):void{
+            // Console.log(this, this.getPlayCoreProxy().getETime() + '/' + this.getPlayCoreProxy().getTotalTime());
 	    player.getProgress().setMaximum(this.getPlayCoreProxy().getTotalTime());
+	    player.getProgress().setExtent(this.getPlayCoreProxy().getETime());
 	}
 
 	private function onChangeVolume(e:InteractiveEvent):void{

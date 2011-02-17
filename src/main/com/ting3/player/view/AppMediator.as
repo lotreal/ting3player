@@ -38,7 +38,7 @@ package com.ting3.player.view
 	    // menu.hideBuiltInItems();
 	    menu.customItems.push(new ContextMenuItem("右键菜单", true, false));
 	    app.contextMenu = menu;
-            createAppWindow();
+            // createAppWindow();
             // updateAllUI();
 	}
 
@@ -77,11 +77,13 @@ package com.ting3.player.view
 
 	private function updateAllUI():void{
 	    if (player == null) {
+                Console.log(this, 'create window');
 		this.createAppWindow();
 	    }
 
 	    UIManager.setLookAndFeel(new XLookAndFeel(getSkinProxy()));
 	    AsWingUtils.updateChildrenUI(app);
+            Console.log(this, 'skin window');
 	}
 	
 	private function createAppWindow():void{
@@ -97,7 +99,7 @@ package com.ting3.player.view
 	    player.pack();
 	    // player.layoutWindows();
 	    player.revalidate();
-
+	    this.sendNotification(Signal.APP_READY);
 	}
 
         private function loadTracklist(e:SelectionEvent):void {

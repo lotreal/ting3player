@@ -124,7 +124,15 @@ package com.ting3.player.model
 	    }
 	}
 	
-	
+	public function getLength():Number {
+            return _mainSd.length || 0;
+        }
+
+	public function getETime():Number {
+	    // Console.log(this, int(100 * e.bytesLoaded / e.bytesTotal));
+	    return getTotalTime() - _mainSd.length;
+        }
+
 	/**
 	* 声音的总时长 毫秒
 	* @return
@@ -200,6 +208,7 @@ package com.ting3.player.model
 	*/
 	private function _createSound():Sound {
 	    var _sd:Sound = new Sound;
+	    // _sd.addEventListener(Event.OPEN, __onSoundLoadOpen);
 	    _sd.addEventListener(Event.COMPLETE, __onSoundLoadComplete);
 	    _sd.addEventListener(ProgressEvent.PROGRESS, __onSoundProgress);
 	    _sd.addEventListener(IOErrorEvent.IO_ERROR, __onSoundLoadError);
@@ -264,7 +273,9 @@ package com.ting3.player.model
 	*/
 	private function __onSoundProgress(e:ProgressEvent):void 
 	{
-	    // Console.log(this, int(100 * e.bytesLoaded / e.bytesTotal));
+            if (e.bytesLoaded > 0) {
+	        this.sendNotification(Signal.APP_TRACK_LOADING, e.bytesLoaded);
+            }
 	}
 	
 	
@@ -278,6 +289,11 @@ package com.ting3.player.model
 	}
 	
 	
+
+	private function __onSoundLoadOpen(e:Event):void {
+            // Console.log(this, 'open:');
+            // Console.log(this, _mainSd);
+	}
 	
 	/**
 	* 加载完成，非播放完成
