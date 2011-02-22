@@ -49,16 +49,16 @@ package com.ting3.player.view
 	}
 
 	private function updateTracklist():void{
-            tracklist.removeSelectionListener(playSong);
+            tracklist.removeSelectionListener(playTrack);
 
             model.clear();
             model.appendAll(getTracklistProxy().getTracklist());
 
-            tracklist.addSelectionListener(playSong);
+            tracklist.addSelectionListener(playTrack);
             tracklist.setSelectedIndex(0);
 	}
 
-	private function playSong(e:SelectionEvent):void{
+	private function playTrack(e:SelectionEvent):void{
 	    this.sendNotification(Signal.APP_PLAY, tracklist.getSelectedTrack());
 	}
 

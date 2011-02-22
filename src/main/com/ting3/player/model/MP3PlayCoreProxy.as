@@ -21,8 +21,8 @@ package com.ting3.player.model
     {
 	public static const NAME:String = "MP3PlayCoreProxy";
 	
-	private var _mainSd:Sound;
-	private var _mainCh:SoundChannel;
+	private var _sound:Sound;
+	private var _channel:SoundChannel;
 	/**
 	* 是不是已停止
 	*/
@@ -40,10 +40,12 @@ package com.ting3.player.model
 	*/
 	private var _soundTransform:SoundTransform = new SoundTransform(0.7);
 	
-	private var _currentSong:TrackVO;
-	
+	private var _currentTrack:TrackVO;
+
+	private var _totalTime:int = int.MAX_VALUE;
+
 	private var timeModel:BoundedRangeModel = new DefaultBoundedRangeModel;
-	
+
 	private var tempShape:Shape = new Shape;
 	
 	public function MP3PlayCoreProxy() 
@@ -51,31 +53,26 @@ package com.ting3.player.model
 	    super(NAME);
 	}
 	
-	public function playSong(s:TrackVO):void {
-            Console.log(this, 'playsong');
-            Console.log(this, s);
-	    _currentSong = s;
+	public function playTrack(t:TrackVO):void {
+            Console.log(this, 'play track: ' + t);
+	    _currentTrack = t;
+
 	    stop();
-	    if (_mainSd) {
-		_disposeSound(_mainSd);
+	    if (_sound) {
+		disposeSound(_sound);
 	    }
 	    
-	    _mainSd = _createSound();
-	    _mainSd.load(new URLRequest(s.location));
-	    _stopChannel();
+	    _sound = createSound();
+	    _sound.load(new URLRequest(t.location));
+	    disposeChannel();
 	    _currentTime = 0;
-	    this.play();
-	    this.sendNotification(Signal.APP_PLAY_BEGIN, s);
+            play();
+	    sendNotification(Signal.APP_PLAY_BEGIN, t);
 	}
 	
-	
-	
-	/**
-	* 播放当前声音对象
-	*/
 	public function play():void
 	{
-	    _mainCh = _playSD(getCurrentTime());
+	    _channel = getChannel(getCurrentTime());
 	    _isPause = false;
 	    _isStop = false;
 	    tempShape.addEventListener(Event.ENTER_FRAME, __soundPlayProgress);
@@ -83,65 +80,41 @@ package com.ting3.player.model
 	    __onStatusChange();
 	}
 	
-	
-	
-	/**
-	* 暂停
-	*/
 	public function pause():void {
 	    _isPause = true;
-	    if (_mainCh) {
+	    if (_channel) {
 		tempShape.removeEventListener(Event.ENTER_FRAME, __soundPlayProgress);
 		//EnterFrameManager.del(__soundPlayProgress);
-		_stopChannel();
+		disposeChannel();
 		__onStatusChange();
 	    }
 	}
 	
-	
-	
-	/**
-	* 停止播放
-	*/
 	public function stop():void {
 	    _isStop = true;
-	    this._stopChannel();
-	    tempShape.addEventListener(Event.ENTER_FRAME, __soundPlayProgress);
+	    disposeChannel();
+	    tempShape.removeEventListener(Event.ENTER_FRAME, __soundPlayProgress);
 	    //EnterFrameManager.del(__soundPlayProgress);
 	    __onStatusChange();
 	}
 	
-	
-	
-	/**
-	* 跳到进度播放
-	* @param	percent
-	*/
 	public function seek(percent:Number, isProgrammatic:Boolean = true):void {
-	    _mainCh = _playSD(getTotalTime() * percent);
+	    _channel = getChannel(getTotalTime() * percent);
 	    if (isPause()) {
-		this._stopChannel();
+		disposeChannel();
 	    }
 	}
 	
-	public function getLength():Number {
-            return _mainSd.length || 0;
-        }
-
-	public function getETime():Number {
-	    // Console.log(this, int(100 * e.bytesLoaded / e.bytesTotal));
-	    return getTotalTime() - _mainSd.length;
+	public function getETime():int {
+	    return getTotalTime() - Math.ceil(_sound.length);
         }
 
 	/**
 	* 声音的总时长 毫秒
 	* @return
 	*/
-	public function getTotalTime():Number {
-	    if (_mainSd.bytesLoaded == 0) {
-		return Number.MAX_VALUE;
-	    }
-	    return _mainSd.length * _mainSd.bytesTotal / _mainSd.bytesLoaded;
+	public function getTotalTime():int {
+            return _totalTime;
 	}
 	
 	
@@ -151,8 +124,8 @@ package com.ting3.player.model
 	*/
 	public function getCurrentTime():Number {
 	    if (!isPause()) {
-		if(_mainCh)
-		_currentTime = _mainCh.position;
+		if(_channel)
+		_currentTime = _channel.position;
 	    }
 	    return _currentTime;
 	}
@@ -165,8 +138,8 @@ package com.ting3.player.model
 	*/
 	public function setVolume(percent:Number, isProgrammatic:Boolean = true):void {
 	    _soundTransform.volume = Math.max(0, Math.min(1, percent));
-	    if (_mainCh)
-	    _mainCh.soundTransform = _soundTransform;
+	    if (_channel)
+	    _channel.soundTransform = _soundTransform;
 	    
 	    this.sendNotification(Signal.APP_VOLUME_CHANGED, getVolume());
 	}
@@ -206,23 +179,20 @@ package com.ting3.player.model
 	* 生成一个已初始化的声音对象
 	* @return
 	*/
-	private function _createSound():Sound {
-	    var _sd:Sound = new Sound;
-	    // _sd.addEventListener(Event.OPEN, __onSoundLoadOpen);
-	    _sd.addEventListener(Event.COMPLETE, __onSoundLoadComplete);
-	    _sd.addEventListener(ProgressEvent.PROGRESS, __onSoundProgress);
-	    _sd.addEventListener(IOErrorEvent.IO_ERROR, __onSoundLoadError);
-	    return _sd;
+	private function createSound():Sound {
+	    var sd:Sound = new Sound;
+	    sd.addEventListener(Event.COMPLETE, __onSoundLoadComplete);
+	    sd.addEventListener(ProgressEvent.PROGRESS, __onSoundProgress);
+	    sd.addEventListener(IOErrorEvent.IO_ERROR, __onSoundLoadError);
+	    return sd;
 	}
 	
 	
 	
-	private function _disposeSound(sd:Sound):void {
-	    try{
+	private function disposeSound(sd:Sound):void {
+	    try {
 		sd.close();
-	    } catch(e:*){
-		
-	    }
+	    } catch(e:*) {}
 	    sd.removeEventListener(Event.COMPLETE, __onSoundLoadComplete);
 	    sd.removeEventListener(ProgressEvent.PROGRESS, __onSoundProgress);
 	    sd.removeEventListener(IOErrorEvent.IO_ERROR, __onSoundLoadError);
@@ -230,88 +200,61 @@ package com.ting3.player.model
 	
 	
 	
-	private function _playSD(time:Number):SoundChannel {
-	    if (_mainCh) {
-		_mainCh.stop();
-		_mainCh.removeEventListener(Event.SOUND_COMPLETE, __onSoundPlayComplete);
+	private function getChannel(time:Number):SoundChannel {
+	    if (_channel) {
+		_channel.stop();
+		_channel.removeEventListener(Event.SOUND_COMPLETE, __onSoundPlayComplete);
 	    }
 	    
-	    _mainCh = _mainSd.play(time);
-	    _mainCh.soundTransform = _soundTransform;
-	    _mainCh.addEventListener(Event.SOUND_COMPLETE, __onSoundPlayComplete);
-	    return _mainCh;
+	    _channel = _sound.play(time);
+	    _channel.soundTransform = _soundTransform;
+	    _channel.addEventListener(Event.SOUND_COMPLETE, __onSoundPlayComplete);
+	    return _channel;
 	}
 	
-	
-	
-	private function _stopChannel():void {
-	    if (_mainCh) {
-		_currentTime = _mainCh.position;
-		_mainCh.stop();
-	    }else
-	    _currentTime = 0;
-	    _mainCh = null;
+	private function disposeChannel():void {
+	    if (_channel) {
+		_currentTime = _channel.position;
+		_channel.stop();
+	    } else {
+	        _currentTime = 0;
+            }
+	    _channel = null;
 	}
-	
-	
-	
-	/**
-	* 声音播放完成时
-	* @param	e
-	*/
+
 	private function __onSoundPlayComplete(e:Event):void 
 	{
 	    stop();
 	    this.sendNotification(Signal.APP_NEXT);
 	}
 	
-	
-	
-	/**
-	* 声音加载的过程
-	* @param	e
-	*/
 	private function __onSoundProgress(e:ProgressEvent):void 
 	{
-            if (e.bytesLoaded > 0) {
-	        this.sendNotification(Signal.APP_TRACK_LOADING, e.bytesLoaded);
+	    if (_sound.bytesLoaded > 0) {
+		_totalTime = int.MAX_VALUE;
+            } else {
+	        _totalTime = Math.ceil(_sound.length * _sound.bytesTotal / _sound.bytesLoaded);
             }
+	    // this.sendNotification(Signal.APP_TRACK_LOADING, e.bytesLoaded);
 	}
 	
-	
-	/**
-	* 声音加载出错。下一首
-	* @param	e
-	*/
 	private function __onSoundLoadError(e:IOErrorEvent):void {
-	    _currentSong.url_invalid = true;
+	    _currentTrack.url_invalid = true;
 	    //this.sendNotification(Signal.APP_NEXT);
 	}
 	
-	
-
 	private function __onSoundLoadOpen(e:Event):void {
             // Console.log(this, 'open:');
-            // Console.log(this, _mainSd);
+            // Console.log(this, _sound);
 	}
 	
-	/**
-	* 加载完成，非播放完成
-	* @param	e
-	*/
 	private function __onSoundLoadComplete(e:Event):void {
-	    //加载完成
-	    
+	    // 加载完成，非播放完成
 	}
 	
-	
-	/**
-	* 一旦播放，不停的发送播放进度信息
-	*/
 	private function __soundPlayProgress(e:Event = null):void {
 	    this.sendNotification(Signal.APP_PLAYING);
 	}
-	
 	
 	private function __onStatusChange():void {
 	    this.sendNotification(Signal.APP_STATUS_CHANGED);
@@ -322,24 +265,21 @@ package com.ting3.player.model
 	* @return 
 	* 
 	*/		
-	public function getStatus():String{
+	public function getStatus():String {
 	    var s:String = "停止";
-	    if(!isStop()){
+	    if(!isStop()) {
 		s = isPlay() ? "播放" : "暂停";
 	    }
 	    return s;
 	}
 	
-	
 	public function getCurrentSong():TrackVO{
-	    return _currentSong;
+	    return _currentTrack;
 	}
-	
 	
 	public function getTimeModel():BoundedRangeModel{
 	    return timeModel;
 	}
 	
     }
-    
 }

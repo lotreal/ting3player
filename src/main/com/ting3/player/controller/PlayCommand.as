@@ -18,7 +18,7 @@ package  com.ting3.player.controller
 	    var s:TrackVO = note.getBody() as TrackVO;
 	    if (s != null) 
             {
-		getMp3CoreProxy().playSong(s);
+		getMp3CoreProxy().playTrack(s);
 	    }
             else {
         	if (getMp3CoreProxy().isPause())
@@ -28,7 +28,7 @@ package  com.ting3.player.controller
                 // else
                 // {
         	//     getListProxy().selectDefaultSong();
-        	//     getMp3CoreProxy().playSong(getListProxy().getCurrentSong());
+        	//     getMp3CoreProxy().playTrack(getListProxy().getCurrentSong());
         	// }
             }
 	}
